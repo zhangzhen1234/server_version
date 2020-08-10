@@ -1,0 +1,5 @@
+continues_cnt_move 3
+continues_cnt_noise 2
+min_connect_area 200
+status_wait_time 1
+success_wait_time 1
