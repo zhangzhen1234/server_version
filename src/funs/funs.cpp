@@ -29,6 +29,7 @@ void readSubConfig(int &len, vector<Json::Value> *paramList, char **param, unsig
 }
 int main()
 {
+	bool IS_DEBUG=false;
 	int Port = 8899;
 	Json::Value RecvBuf;
 	HttpServer sock;
@@ -69,17 +70,22 @@ int main()
 			subParam.append(*it);
 		}
 	childparamJson["child_param"] = subParam;
+
 	//发送启动项参数
+	
 	while(1)
 	{
           sock.Recv(RecvBuf);
-		  cout<<"RecvBuf"<<RecvBuf<<endl;
+		  if(IS_DEBUG)
+		  {
+             cout<<"RecvBuf"<<RecvBuf<<endl;
+		  }
 		  Json::Value::Members members;  
           members = RecvBuf.getMemberNames();
 		  for (Json::Value::Members::iterator iterMember = members.begin(); iterMember != members.end(); iterMember++)   // 遍历每个key
 			{  
 				string strKey = *iterMember;
-				if (!RecvBuf[strKey.c_str()][0u].isNull())
+				if (!RecvBuf[strKey.c_str()].empty())
 				{  
 					if(strKey=="parameter") //修改总参数
 					{
@@ -152,7 +158,8 @@ int main()
 							puts("Fail to open config.txt!");
 						}
 						cfg_sub.readConfig_json(len, Buf_sub,subParamCount,is_sub);
-						childparamJson["child_param"] = Buf_sub;
+						childparamJson["child_param"][0u]= Buf_sub;
+						cout<<childparamJson<<endl;
 						sock.Send(childparamJson);
 					}
 					else if(strKey=="child_rectangle")//修改启动项目
@@ -167,22 +174,15 @@ int main()
 				}
 				else
 				{
-					if(strKey=="parameter") //点击总参按钮
+					
+					if(strKey=="parameter"||strKey=="child_param"||strKey=="child_rectangle") //点击总参按钮
 					{
+						if(IS_DEBUG)
+						{
+                            cout<<"parameterJson:"<<parameterJson;
+							cout<<"childparamJson"<<childparamJson;
+						}
 						sock.Send(parameterJson);
-					}
-					else if(strKey=="child_param")//点击子参按钮
-					{
-					//    Json::Value DevJson1;
-                    //    childparamJson.clear();
-                    //    DevJson1["child_number"] = "0";
-					//    DevJson1["continues_cnt_move"] = "400";
-					//    childparamJson["child_param"][0u] = DevJson1;
-					// 	cout<<"childparamJson"<<childparamJson<<endl;
-						sock.Send(childparamJson);
-					}
-					else if(strKey=="child_rectangle")//点击启动项目
-					{
 						sock.Send(childparamJson);
 					}
 					else if(strKey=="clear")//点击清除缓存
@@ -191,7 +191,7 @@ int main()
 					}
 					else if(strKey=="quit")//点击退出
 					{
-						break;
+						return 0;
 					}
 				}
 				 

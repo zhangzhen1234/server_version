@@ -15,7 +15,7 @@ bool HttpServer::Bind(int port)
 	RecvAddr.sin_family = AF_INET;
 	RecvAddr.sin_port = htons(port);
 	// RecvAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	RecvAddr.sin_addr.s_addr =inet_addr("192.168.8.101");
+	RecvAddr.sin_addr.s_addr =inet_addr("192.168.8.100");
 	int ret=bind(_RecvSocket, (struct sockaddr *)&RecvAddr, sizeof(RecvAddr));
 	if (ret < 0) {
 		perror("bind error");

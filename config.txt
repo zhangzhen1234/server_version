@@ -1,6 +1,6 @@
-screen_width 23
+screen_width 1080
 screen_height 960
-image_width 640
+image_width 2
 image_height 480
 input_type 2
 cap_num 2
@@ -23,4 +23,4 @@ denoise 1
 mount_fdisk 0
 load_parm_file 1
 open_hdmi 66
-debug 66
+debug 24
